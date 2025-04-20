@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Doggo IQ: Trivia Tails!</title>
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.js"></script>
+  <style>
+    body { margin: 0; padding: 0; background: #f9f3e7; }
+    canvas { display: block; margin: auto; }
+  </style>
+</head>
+<body>
+  <script>
+    const config = {
+      type: Phaser.AUTO,
+      width: 800,
+      height: 600,
+      backgroundColor: '#fff2cc',
+      scene: {
+        preload,
+        create,
+        update
+      }
+    };
+
+    const game = new Phaser.Game(config);
+
+    let questionText, choices = [], dogImage, resultText;
+
+    const triviaData = [
+      {
+        question: "What breed is known for its super fluffy coat and sled-pulling strength?",
+        options: ["Poodle", "Husky", "Chihuahua"],
+        correct: 1,
+        dogImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Husky_Siberian.jpg/320px-Husky_Siberian.jpg"
+      }
+    ];
+
+    function preload() {
+      this.load.image('husky', triviaData[0].dogImage);
+    }
+
+    function create() {
+      const q = triviaData[0];
+      questionText = this.add.text(400, 50, q.question, {
+        fontSize: '24px', color: '#333', wordWrap: { width: 700, useAdvancedWrap: true }, align: 'center'
+      }).setOrigin(0.5);
+
+      dogImage = this.add.image(400, 170, 'husky').setDisplaySize(180, 180);
+
+      for (let i = 0; i < q.options.length; i++) {
+        let btn = this.add.text(400, 380 + i * 50, q.options[i], {
+          fontSize: '20px', backgroundColor: '#d9ead3', padding: { x: 10, y: 5 }, color: '#000' 
+        }).setOrigin(0.5).setInteractive();
+
+        btn.on('pointerdown', () => checkAnswer(i, q.correct));
+        choices.push(btn);
+      }
+
+      resultText = this.add.text(400, 550, '', {
+        fontSize: '24px', color: '#000' 
+      }).setOrigin(0.5);
+    }
+
+    function checkAnswer(selected, correct) {
+      if (selected === correct) {
+        resultText.setText("Correct! You earned Luna the Husky!");
+      } else {
+        resultText.setText("Oops! Try again next round!");
+      }
+    }
+
+    function update() {}
+  </script>
+</body>
+</html>
